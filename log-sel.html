@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Sign Up</title>
+    <style>
+        :root {
+            --accent: #ff7043;
+            --accent-dark: #e64a19;
+            --text-dark: #2b2b2b;
+            --text-muted: #6b6b6b;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-image: url('log-sel.webp');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        /* Soft dark overlay so the image doesn't fight with the card for attention */
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.35);
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 440px;
+            background: rgba(255, 255, 255, 0.97);
+            padding: 36px 34px;
+            border-radius: 18px;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
+            animation: rise 0.5s ease-out;
+        }
+
+        @keyframes rise {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .icon-badge {
+            width: 56px;
+            height: 56px;
+            margin: 0 auto 14px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            color: #fff;
+            box-shadow: 0 8px 18px rgba(230, 74, 25, 0.35);
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--text-dark);
+            margin: 0 0 6px;
+            font-size: 24px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 14px;
+            margin: 0 0 26px;
+        }
+
+        label {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 6px;
+            color: #444;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 14px;
+            margin-bottom: 18px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            background: #fafafa;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(255, 112, 67, 0.15);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: #aaa;
+            font-size: 12px;
+            margin: 22px 0 16px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .divider span {
+            padding: 0 10px;
+        }
+
+        .option-group {
+            display: flex;
+            gap: 12px;
+        }
+
+        .option-box {
+            flex: 1;
+            padding: 16px 12px;
+            background: #fdf6f3;
+            border: 1.5px solid #ffe0d3;
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        .option-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255, 112, 67, 0.18);
+            border-color: var(--accent);
+        }
+
+        .option-box .emoji {
+            font-size: 22px;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .option-box p {
+            margin: 0 0 10px;
+            font-size: 13px;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .option-box a {
+            display: inline-block;
+            width: 100%;
+            padding: 9px 0;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            color: #fff;
+            text-decoration: none;
+            border-radius: 7px;
+            font-size: 13px;
+            font-weight: 600;
+            transition: opacity 0.2s ease;
+        }
+
+        .option-box a:hover {
+            opacity: 0.88;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 28px 22px;
+            }
+
+            .option-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="overlay"></div>
+    <div class="container">
+        <h2>Seller Sign Up</h2>
+        <p class="subtitle">Create your account and start selling today</p>
+
+        <form method="POST" action="server.php">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="Name" placeholder="e.g. Priya Sharma" required>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" name="Email" placeholder="you@example.com" required>
+
+            <label for="account">Account Name</label>
+            <input type="text" id="account" name="AccountName" placeholder="Choose a unique account name" required>
+        </form>
+
+        <div class="divider"><span>Choose your seller type</span></div>
+
+        <div class="option-group">
+            <div class="option-box">
+                <span class="emoji">👤</span>
+                <p>Individual Seller</p>
+                <a href="D:\ddrive\project-petportal\ind-sel.html">Continue</a>
+            </div>
+            <div class="option-box">
+                <span class="emoji">🏬</span>
+                <p>Shop Holder</p>
+                <a href="">Continue</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

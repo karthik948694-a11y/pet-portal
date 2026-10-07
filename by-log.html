@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buyer Sign Up</title>
+    <style>
+        :root {
+            --accent: #26a69a;
+            --accent-dark: #00796b;
+            --text-dark: #2b2b2b;
+            --text-muted: #6b6b6b;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-image: url('log-sel.webp');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.35);
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 440px;
+            background: rgba(255, 255, 255, 0.97);
+            padding: 36px 34px;
+            border-radius: 18px;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
+            animation: rise 0.5s ease-out;
+        }
+
+        @keyframes rise {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .icon-badge {
+            width: 56px;
+            height: 56px;
+            margin: 0 auto 14px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            color: #fff;
+            box-shadow: 0 8px 18px rgba(0, 121, 107, 0.35);
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--text-dark);
+            margin: 0 0 6px;
+            font-size: 24px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 14px;
+            margin: 0 0 26px;
+        }
+
+        label {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 6px;
+            color: #444;
+            font-size: 14px;
+        }
+
+        .hint {
+            font-weight: 400;
+            color: #999;
+            font-size: 12px;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 12px 14px;
+            margin-bottom: 18px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            background: #fafafa;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(38, 166, 154, 0.15);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 13px 0;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+        }
+
+        .submit-btn:hover {
+            opacity: 0.9;
+        }
+
+        .note {
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+            margin-top: 14px;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 28px 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="overlay"></div>
+    <div class="container">
+        <h2>Buyer Sign Up</h2>
+        <p class="subtitle">Create your account to start shopping</p>
+
+        <form method="POST" action="server.php">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="Name" placeholder="e.g. Priya Sharma" required>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" name="Email" placeholder="you@example.com" required>
+
+            <label for="aadhar">Aadhar Number</label>
+            <input type="text" id="aadhar" name="Aadhar" placeholder="XXXX XXXX XXXX" maxlength="12" pattern="\d{12}"
+                title="Enter 12-digit Aadhar number" required>
+
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="PhoneNumber" placeholder="10-digit mobile number" pattern="\d{10}"
+                title="Enter 10-digit phone number" required>
+
+            <label for="address">Address</label>
+            <textarea id="address" name="Address" placeholder="House no., street, city, state, PIN code"
+                required></textarea>
+
+        <button type="submit" class="submit-btn"><a href="byer.html" class="submit-btn">Create Account</a></button>
+        </form>
+
+        <p class="note">Your Aadhar details are used only for identity verification.</p>
+    </div>
+</body>
+
+</html>

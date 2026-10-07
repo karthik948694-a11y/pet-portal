@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Pet | Seller Dashboard</title>
+    <style>
+        :root {
+            --accent: #e11d48;
+            --accent-light: #fff1f2;
+            --text-dark: #111827;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --bg: #f8f9fb;
+            --card-bg: #ffffff
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text-dark)
+        }
+
+        .topbar {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 10
+        }
+
+        .topbar-inner {
+            max-width: 1120px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 24px;
+            flex-wrap: wrap;
+            gap: 12px
+        }
+
+        .brand {
+            font-weight: 700;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px
+        }
+
+        .tabs {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap
+        }
+
+        .tab {
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 13.5px;
+            font-weight: 500;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: background 0.15s ease, color 0.15s ease;
+            white-space: nowrap
+        }
+
+        .tab.active {
+            background: var(--accent-light);
+            color: var(--accent);
+            font-weight: 600
+        }
+
+        .tab:not(.active):hover {
+            background: #f3f4f6;
+            color: var(--text-dark)
+        }
+
+        .page {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 32px 24px 60px
+        }
+
+        .page-header {
+            margin-bottom: 24px
+        }
+
+        .page-header h1 {
+            margin: 0 0 4px;
+            font-size: 22px
+        }
+
+        .page-header p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 13.5px
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 16px
+        }
+
+        .add-card {
+            background: #fff;
+            border: 1.5px dashed #fecdd3;
+            border-radius: 10px;
+            min-height: 210px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: border-color 0.15s ease, background 0.15s ease
+        }
+
+        .add-card:hover {
+            border-color: var(--accent);
+            background: var(--accent-light)
+        }
+
+        .add-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 8px;
+            background: var(--accent);
+            color: #fff;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        .pet-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden
+        }
+
+        .pet-card .thumb {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            background: #f3f4f6;
+            display: block
+        }
+
+        .pet-card .thumb.placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: #d1d5db
+        }
+
+        .pet-card .body {
+            padding: 12px 14px 14px
+        }
+
+        .pet-card h3 {
+            margin: 0 0 4px;
+            font-size: 14.5px;
+            font-weight: 600
+        }
+
+        .pet-card .meta {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin: 0 0 8px
+        }
+
+        .pet-card .price {
+            font-weight: 700;
+            color: var(--accent);
+            font-size: 14.5px;
+            margin-bottom: 10px
+        }
+
+        .pet-card .remove-btn {
+            width: 100%;
+            padding: 6px 0;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: #fff;
+            color: #b91c1c;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer
+        }
+
+        .pet-card .remove-btn:hover {
+            background: #fef2f2;
+            border-color: #fecaca
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(17, 24, 39, 0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            padding: 20px
+        }
+
+        .modal-overlay.open {
+            display: flex
+        }
+
+        .modal {
+            background: #fff;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 440px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 26px 26px 22px;
+            border: 1px solid var(--border)
+        }
+
+        .modal h2 {
+            margin: 0 0 4px;
+            font-size: 18px
+        }
+
+        .modal .modal-sub {
+            margin: 0 0 18px;
+            font-size: 13px;
+            color: var(--text-muted)
+        }
+
+        .upload-box {
+            border: 1.5px dashed #fecdd3;
+            border-radius: 9px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            margin-bottom: 16px;
+            background: #fffafa;
+            transition: border-color 0.15s ease
+        }
+
+        .upload-box:hover {
+            border-color: var(--accent)
+        }
+
+        .upload-box img {
+            max-width: 100%;
+            max-height: 130px;
+            border-radius: 6px;
+            display: none;
+            margin: 0 auto
+        }
+
+        .upload-box .upload-hint {
+            font-size: 12.5px;
+            color: var(--text-muted)
+        }
+
+        .upload-box .upload-icon {
+            font-size: 26px;
+            color: var(--accent);
+            margin-bottom: 4px
+        }
+
+        .modal label {
+            font-weight: 600;
+            font-size: 13px;
+            display: block;
+            margin-bottom: 6px;
+            color: #374151
+        }
+
+        .modal input,
+        .modal select,
+        .modal textarea {
+            width: 100%;
+            padding: 10px 12px;
+            margin-bottom: 14px;
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            font-size: 13.5px;
+            font-family: inherit;
+            background: #fafafa
+        }
+
+        .modal input:focus,
+        .modal select:focus,
+        .modal textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.12)
+        }
+
+        .modal textarea {
+            resize: vertical;
+            min-height: 55px
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 4px
+        }
+
+        .btn {
+            flex: 1;
+            padding: 10px 0;
+            border-radius: 7px;
+            font-size: 13.5px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #fff
+        }
+
+        .btn-primary:hover {
+            background: #be123c
+        }
+
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151
+        }
+
+        .btn-secondary:hover {
+            background: #e5e7eb
+        }
+
+        footer {
+            background: #ffffff;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 22px 24px;
+            text-align: center;
+            font-size: 13px
+        }
+
+        footer a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 600;
+            margin: 0 12px
+        }
+
+        footer a:hover {
+            text-decoration: underline
+        }
+    </style>
+</head>
+
+<body>
+    <div class="topbar">
+        <div class="topbar-inner">
+            <div class="brand">🐾 PetPortal Seller</div>
+            <div class="tabs"><a href="your-space.html" class="tab">Your Space</a><a href="sel1.html"
+                    class="tab active">Add Pet</a><a href="pet-the-pet.html" class="tab">Pet the Pet</a><a
+                    href="feed-me.html" class="tab">Feed Me</a></div>
+        </div>
+    </div>
+    <div class="page">
+        <div class="page-header">
+            <h1>Add Pet</h1>
+            <p>List the animals you have available for sale. Buyers will see these with photos and details.</p>
+        </div>
+        <div class="grid" id="petGrid">
+            <div class="add-card" id="openModalBtn">
+                <div class="add-icon">+</div>
+            </div>
+            <div class="pet-card">
+                <div class="thumb placeholder">🐾</div>
+                <div class="body">
+                    <h3>Buddy</h3>
+                    <p class="meta">Labrador &middot; 8 months &middot; Male</p>
+                    <p class="price">₹12,000</p><button class="remove-btn">Remove Listing</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <h2>Add an Animal</h2>
+            <p class="modal-sub">Fill in the details below to list this animal for sale.</p>
+            <form id="petForm">
+                <div class="upload-box" id="uploadBox"><img id="previewImg" alt="Animal preview">
+                    <div id="uploadPlaceholder">
+                        <div class="upload-icon">📷</div>
+                        <div class="upload-hint">Click to upload a photo</div>
+                    </div><input type="file" id="photoInput" accept="image/*" style="display:none;">
+                </div><label for="petName">Animal Name</label><input type="text" id="petName" placeholder="e.g. Buddy"
+                    required><label for="petType">Animal Type</label><select id="petType" required>
+                    <option value="" disabled selected>Select type</option>
+                    <option>Dog</option>
+                    <option>Cat</option>
+                    <option>Bird</option>
+                    <option>Fish</option>
+                    <option>Rabbit</option>
+                    <option>Other</option>
+                </select><label for="petBreed">Breed</label><input type="text" id="petBreed"
+                    placeholder="e.g. Labrador"><label for="petAge">Age</label><input type="text" id="petAge"
+                    placeholder="e.g. 8 months"><label for="petPrice">Price (₹)</label><input type="number"
+                    id="petPrice" placeholder="e.g. 12000" min="0" required><label
+                    for="petDesc">Description</label><textarea id="petDesc"
+                    placeholder="Temperament, vaccination status, any other details"></textarea>
+                <div class="modal-actions"><button type="button" class="btn btn-secondary"
+                        id="cancelBtn">Cancel</button><button type="submit" class="btn btn-primary">Add Listing</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <footer>
+        <p>© 2026 PetPortal. All rights reserved.</p>
+        <div><a href="about.html">About</a><a href="contact.html">Contact Us</a></div>
+    </footer>
+    <script>const openModalBtn = document.getElementById('openModalBtn'); const modalOverlay = document.getElementById('modalOverlay'); const cancelBtn = document.getElementById('cancelBtn'); const uploadBox = document.getElementById('uploadBox'); const photoInput = document.getElementById('photoInput'); const previewImg = document.getElementById('previewImg'); const uploadPlaceholder = document.getElementById('uploadPlaceholder'); const petForm = document.getElementById('petForm'); const petGrid = document.getElementById('petGrid'); let uploadedImageSrc = null; function openModal() { modalOverlay.classList.add('open'); }
+        function closeModal() { modalOverlay.classList.remove('open'); petForm.reset(); previewImg.style.display = 'none'; uploadPlaceholder.style.display = 'block'; uploadedImageSrc = null; }
+        openModalBtn.addEventListener('click', openModal); cancelBtn.addEventListener('click', closeModal); modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); }); uploadBox.addEventListener('click', () => photoInput.click()); photoInput.addEventListener('change', () => { const file = photoInput.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = (e) => { uploadedImageSrc = e.target.result; previewImg.src = uploadedImageSrc; previewImg.style.display = 'block'; uploadPlaceholder.style.display = 'none'; }; reader.readAsDataURL(file); }); petForm.addEventListener('submit', (e) => {
+            e.preventDefault(); const name = document.getElementById('petName').value; const type = document.getElementById('petType').value; const breed = document.getElementById('petBreed').value; const age = document.getElementById('petAge').value; const price = document.getElementById('petPrice').value; const card = document.createElement('div'); card.className = 'pet-card'; card.innerHTML = `
+                ${uploadedImageSrc
+                    ? `<img class="thumb" src="${uploadedImageSrc}" alt="${name}">`
+                    : `<div class="thumb placeholder">🐾</div>`}
+                <div class="body">
+                    <h3>${name}</h3>
+                    <p class="meta">${[type, breed, age].filter(Boolean).join(' &middot; ')}</p>
+                    <p class="price">₹${Number(price).toLocaleString('en-IN')}</p>
+                    <button class="remove-btn">Remove Listing</button>
+                </div>
+            `; card.querySelector('.remove-btn').addEventListener('click', () => card.remove()); petGrid.appendChild(card); closeModal();
+        });</script>
+</body>
+
+</html>

@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetPortal | Marketplace</title>
+    <style>
+        :root {
+            --accent: #0284c7;
+            --accent-dark: #0369a1;
+            --accent-light: #f0f9ff;
+            --green: #16a34a;
+            --text-dark: #111827;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --bg: #f8f9fb;
+            --card-bg: #ffffff;
+            --ph-bg: #eef1f4;
+            --ph-text: #9aa3ad;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text-dark);
+        }
+
+        a {
+            color: inherit;
+        }
+
+        /* ---------- Reusable photo placeholder ----------
+       Swap these out for real <img src="your-photo.jpg"> tags when ready.
+       Structure to replace: <div class="photo-placeholder">...</div>
+       becomes: <img src="your-photo.jpg" alt="..." style="width:100%;height:100%;object-fit:cover;">
+    */
+        .photo-placeholder {
+            width: 100%;
+            height: 100%;
+            background: var(--ph-bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--ph-text);
+            font-size: 11px;
+            gap: 3px;
+        }
+
+        .photo-placeholder .ph-icon {
+            font-size: 15px;
+            opacity: 0.7;
+        }
+
+        /* ---------- Top nav ---------- */
+        .topbar {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+
+        .topbar-inner {
+            max-width: 1240px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 12px 24px;
+            flex-wrap: wrap;
+        }
+
+        .brand {
+            font-weight: 700;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .search-bar {
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            align-items: center;
+            background: #f3f4f6;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0 12px;
+        }
+
+        .search-bar input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 9px 8px;
+            font-size: 13.5px;
+            outline: none;
+        }
+
+        .search-bar .icon {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-btn {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            padding: 6px 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 11px;
+            color: var(--text-muted);
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-family: inherit;
+        }
+
+        .nav-btn:hover {
+            background: #f3f4f6;
+            color: var(--text-dark);
+        }
+
+        .nav-btn .nav-icon {
+            font-size: 18px;
+        }
+
+        .badge {
+            position: absolute;
+            top: 2px;
+            right: 4px;
+            background: var(--accent);
+            color: #fff;
+            font-size: 9.5px;
+            font-weight: 700;
+            min-width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 2px;
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--accent-light);
+            color: var(--accent-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 13px;
+            margin-left: 6px;
+            cursor: pointer;
+        }
+
+        /* ---------- Page ---------- */
+        .page {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .section {
+            margin-bottom: 36px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+
+        .section-header h2 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .section-header p {
+            margin: 2px 0 0;
+            font-size: 12.5px;
+            color: var(--text-muted);
+        }
+
+        /* ---------- Carousel ---------- */
+        .carousel {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            background: #fff;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.4s ease;
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            height: 260px;
+            position: relative;
+        }
+
+        .carousel-slide .slide-caption {
+            position: absolute;
+            left: 20px;
+            bottom: 16px;
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .carousel-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 15px;
+            z-index: 2;
+        }
+
+        .carousel-arrow.prev {
+            left: 12px;
+        }
+
+        .carousel-arrow.next {
+            right: 12px;
+        }
+
+        .carousel-dots {
+            position: absolute;
+            bottom: 12px;
+            right: 16px;
+            display: flex;
+            gap: 6px;
+            z-index: 2;
+        }
+
+        .carousel-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+        }
+
+        .carousel-dot.active {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        @media (max-width: 600px) {
+            .carousel-slide {
+                height: 180px;
+            }
+        }
+
+        /* ---------- Top Buy Pets grid ---------- */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 16px;
+        }
+
+        .product-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-thumb-wrap {
+            position: relative;
+            height: 150px;
+        }
+
+        .wishlist-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 13px;
+            color: #9ca3af;
+            z-index: 2;
+        }
+
+        .wishlist-btn.active {
+            color: #e11d48;
+        }
+
+        .verified-tag {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: #ecfdf5;
+            color: #047857;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 7px;
+            border-radius: 5px;
+            z-index: 2;
+        }
+
+        .product-body {
+            padding: 12px 14px 14px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-body h3 {
+            margin: 0 0 3px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .product-meta {
+            font-size: 11.5px;
+            color: var(--text-muted);
+            margin: 0 0 6px;
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11.5px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .rating .stars {
+            color: #f59e0b;
+            letter-spacing: -1px;
+        }
+
+        .price-row {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            margin-top: auto;
+            margin-bottom: 10px;
+        }
+
+        .price {
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .seller-name {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .add-cart-btn {
+            width: 100%;
+            padding: 8px 0;
+            border-radius: 7px;
+            border: none;
+            background: var(--accent);
+            color: #fff;
+            font-size: 12.5px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .add-cart-btn.in-cart {
+            background: var(--green);
+        }
+
+        .add-cart-btn:hover {
+            opacity: 0.92;
+        }
+
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 30px;
+            color: var(--text-muted);
+            font-size: 13.5px;
+            border: 1px dashed var(--border);
+            border-radius: 10px;
+            background: #fff;
+        }
+
+        /* ---------- Pick Your Pet ---------- */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px 12px;
+        }
+
+        .category-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .category-circle {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid var(--border);
+            transition: border-color 0.15s ease;
+        }
+
+        .category-item.active .category-circle,
+        .category-item:hover .category-circle {
+            border-color: var(--accent);
+        }
+
+        .category-item .cat-label {
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .category-item.active .cat-label {
+            color: var(--accent-dark);
+        }
+
+        @media (max-width: 480px) {
+            .category-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* ---------- Footer ---------- */
+        footer {
+            background: #ffffff;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 22px 24px;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        footer a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 600;
+            margin: 0 12px;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* ---------- Cart drawer ---------- */
+        .cart-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(17, 24, 39, 0.45);
+            z-index: 50;
+        }
+
+        .cart-overlay.open {
+            display: block;
+        }
+
+        .cart-drawer {
+            position: fixed;
+            top: 0;
+            right: -380px;
+            width: 360px;
+            max-width: 90vw;
+            height: 100vh;
+            background: #fff;
+            z-index: 51;
+            transition: right 0.25s ease;
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid var(--border);
+        }
+
+        .cart-drawer.open {
+            right: 0;
+        }
+
+        .cart-header {
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .cart-header h3 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .cart-header button {
+            border: none;
+            background: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .cart-items {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px 20px;
+        }
+
+        .cart-empty {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+            padding: 40px 10px;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            align-items: center;
+        }
+
+        .cart-item .thumb-sm {
+            width: 44px;
+            height: 44px;
+            border-radius: 6px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .cart-item .info {
+            flex: 1;
+        }
+
+        .cart-item .info .name {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .cart-item .info .price {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .cart-item .remove {
+            border: none;
+            background: none;
+            color: #b91c1c;
+            font-size: 11.5px;
+            cursor: pointer;
+        }
+
+        .cart-footer {
+            padding: 16px 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 11px 0;
+            border-radius: 8px;
+            border: none;
+            background: var(--accent);
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .checkout-btn:hover {
+            background: var(--accent-dark);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="topbar">
+        <div class="topbar-inner">
+            <div class="brand">🐾 PetPortal</div>
+            <div class="search-bar">
+                <span class="icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="Search pets, food, equipment...">
+            </div>
+            <div class="nav-actions">
+                <a href="buyer-orders.html" class="nav-btn">
+                    <span class="nav-icon">📦</span>
+                    Orders
+                </a>
+                <button class="nav-btn" id="wishlistNavBtn">
+                    <span class="nav-icon">🤍</span>
+                    Wishlist
+                    <span class="badge" id="wishlistCount" style="display:none;">0</span>
+                </button>
+                <button class="nav-btn" id="cartNavBtn">
+                    <span class="nav-icon">🛒</span>
+                    Cart
+                    <span class="badge" id="cartCount" style="display:none;">0</span>
+                </button>
+                <div class="avatar">P</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page">
+
+        <!-- ---------- Hot Buying Pets carousel ---------- -->
+        <div class="section">
+            <div class="section-header">
+                <div>
+                    <h2>🔥 Hot Buying Pets</h2>
+                    <p>Trending listings this week</p>
+                </div>
+            </div>
+
+            <div class="carousel" id="carousel">
+                <div class="carousel-track" id="carouselTrack">
+                    <div class="carousel-slide">
+                        <div class="photo-placeholder">
+                            <span class="ph-icon">🖼</span>
+                            Slide 1 — add banner photo (1200×400)
+                            <img src="C:\D-drive\ddrive\project-petportal\persian-cat-1200x400.jpeg">
+                        <div class="slide-caption">Golden Retriever pups — from ₹14,000</div>
+                    </div>
+                    <div class="carousel-slide">
+                        <div class="photo-placeholder">
+                            <span class="ph-icon">🖼</span>
+                            Slide 2 — add banner photo (1200×400)
+                            <img src="">
+                        </div>
+                        <div class="slide-caption">Persian kittens now available</div>
+                    </div>
+                    <div class="carousel-slide">
+                        <div class="photo-placeholder">
+                            <span class="ph-icon">🖼</span>
+                            Slide 3 — add banner photo (1200×400)
+                            <img src="C:\D-drive\ddrive\project-petportal\pet-food-1200x400.jpg">
+                        </div>
+                        <div class="slide-caption">Weekend sale on pet food & equipment</div>
+                    </div>
+                </div>
+
+                <div class="carousel-arrow prev" id="carouselPrev">‹</div>
+                <div class="carousel-arrow next" id="carouselNext">›</div>
+                <div class="carousel-dots" id="carouselDots"></div>
+            </div>
+        </div>
+
+        <!-- ---------- Top Buy Pets ---------- -->
+        <div class="section">
+            <div class="section-header">
+                <div>
+                    <h2>⭐ Top Buy Pets</h2>
+                    <p id="resultsCount">Popular listings from verified sellers</p>
+                </div>
+            </div>
+
+            <div class="product-grid" id="productGrid"></div>
+        </div>
+
+        <!-- ---------- Pick Your Pet ---------- -->
+        <div class="section">
+            <div class="section-header">
+                <div>
+                    <h2>🐾 Pick Your Pet</h2>
+                    <p>Browse by animal type</p>
+                </div>
+            </div>
+
+            <div class="category-grid" id="categoryGrid"></div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>© 2026 PetPortal. All rights reserved.</p>
+        <div>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact Us</a>
+        </div>
+    </footer>
+
+    <!-- Cart drawer -->
+    <div class="cart-overlay" id="cartOverlay"></div>
+    <div class="cart-drawer" id="cartDrawer">
+        <div class="cart-header">
+            <h3>Your Cart</h3>
+            <button id="closeCartBtn">✕</button>
+        </div>
+        <div class="cart-items" id="cartItems"></div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total</span>
+                <span id="cartTotal">₹0</span>
+            </div>
+            <button class="checkout-btn">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <script>
+        // ---------- Demo data ----------
+        // In production these come from your backend (real seller listings).
+        // Each listing has an "img" field — set it to a real photo path when you have one,
+        // e.g. img: "photos/buddy.jpg". Leave it null to keep the placeholder box.
+        const listings = [
+            { id: 1, name: 'Buddy', category: 'Dog', meta: 'Labrador · 8 months', price: 12000, rating: 4.8, reviews: 24, seller: 'Ramesh Kennels', verified: true, img: null },
+            { id: 2, name: 'Whiskers', category: 'Cat', meta: 'Persian · 1 year', price: 8500, rating: 4.6, reviews: 15, seller: 'Chennai Cattery', verified: true, img: null },
+            { id: 3, name: 'Max', category: 'Dog', meta: 'Beagle · 1 year', price: 15000, rating: 4.9, reviews: 31, seller: 'Ramesh Kennels', verified: true, img: null },
+            { id: 4, name: 'Snowy', category: 'Rabbit', meta: 'Angora · 4 months', price: 1800, rating: 4.7, reviews: 11, seller: 'Bunny Burrow', verified: false, img: null },
+            { id: 5, name: 'Sunny', category: 'Bird', meta: 'Cockatiel · 6 months', price: 2200, rating: 4.4, reviews: 9, seller: 'Feather Friends', verified: false, img: null },
+            { id: 6, name: 'Goldie', category: 'Fish', meta: 'Goldfish (pair)', price: 350, rating: 4.2, reviews: 6, seller: 'Aqua World', verified: true, img: null },
+            { id: 7, name: 'Coco', category: 'Cat', meta: 'Persian kitten · 3 months', price: 9500, rating: 4.5, reviews: 8, seller: 'Chennai Cattery', verified: true, img: null },
+            { id: 8, name: 'Rocky', category: 'Dog', meta: 'German Shepherd · 1 year', price: 18000, rating: 4.9, reviews: 40, seller: 'Ramesh Kennels', verified: true, img: null }
+        ];
+
+        // Categories for "Pick Your Pet" -- add an img path here too when ready.
+        const categories = [
+            { name: 'Dog', img: null }, { name: 'Cat', img: null }, { name: 'Rabbit', img: null }, { name: 'Bird', img: null },
+            { name: 'Fish', img: null }, { name: 'Hamster', img: null }, { name: 'Guinea Pig', img: null }, { name: 'Turtle', img: null },
+            { name: 'Parrot', img: null }, { name: 'Duck', img: null }, { name: 'Goat', img: null }, { name: 'Horse', img: null }
+        ];
+
+        let wishlist = new Set();
+        let cart = {};
+        let activeCategory = 'all';
+
+        const productGrid = document.getElementById('productGrid');
+        const resultsCount = document.getElementById('resultsCount');
+        const searchInput = document.getElementById('searchInput');
+        const categoryGrid = document.getElementById('categoryGrid');
+
+        function photoBox(img, label) {
+            return img
+                ? `<img src="${img}" alt="${label}" style="width:100%;height:100%;object-fit:cover;display:block;">`
+                : `<div class="photo-placeholder"><span class="ph-icon">🖼</span>${label}</div>`;
+        }
+
+        function starString(rating) {
+            const full = Math.round(rating);
+            return '★★★★★'.slice(0, full) + '☆☆☆☆☆'.slice(0, 5 - full);
+        }
+
+        function getFiltered() {
+            return listings.filter(item => {
+                if (activeCategory !== 'all' && item.category !== activeCategory) return false;
+                const q = searchInput.value.trim().toLowerCase();
+                if (q && !item.name.toLowerCase().includes(q) && !item.meta.toLowerCase().includes(q)) return false;
+                return true;
+            });
+        }
+
+        function renderProducts() {
+            const items = getFiltered();
+            resultsCount.textContent = activeCategory === 'all'
+                ? 'Popular listings from verified sellers'
+                : `Showing ${items.length} listing(s) in ${activeCategory}`;
+
+            productGrid.innerHTML = items.length === 0
+                ? `<div class="no-results">No listings match your search yet.</div>`
+                : items.map(item => `
+                    <div class="product-card">
+                        <div class="product-thumb-wrap">
+                            ${photoBox(item.img, 'Add photo')}
+                            ${item.verified ? `<div class="verified-tag">✓ Verified</div>` : ''}
+                            <div class="wishlist-btn ${wishlist.has(item.id) ? 'active' : ''}" data-id="${item.id}">
+                                ${wishlist.has(item.id) ? '❤' : '♡'}
+                            </div>
+                        </div>
+                        <div class="product-body">
+                            <h3>${item.name}</h3>
+                            <p class="product-meta">${item.meta}</p>
+                            <div class="rating">
+                                <span class="stars">${starString(item.rating)}</span>
+                                <span>${item.rating} (${item.reviews})</span>
+                            </div>
+                            <div class="price-row">
+                                <div>
+                                    <div class="price">₹${item.price.toLocaleString('en-IN')}</div>
+                                    <div class="seller-name">${item.seller}</div>
+                                </div>
+                            </div>
+                            <button class="add-cart-btn ${cart[item.id] ? 'in-cart' : ''}" data-id="${item.id}">
+                                ${cart[item.id] ? `In Cart (${cart[item.id]})` : 'Add to Cart'}
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+
+            document.querySelectorAll('.wishlist-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = Number(btn.dataset.id);
+                    wishlist.has(id) ? wishlist.delete(id) : wishlist.add(id);
+                    updateWishlistBadge();
+                    renderProducts();
+                });
+            });
+
+            document.querySelectorAll('.add-cart-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = Number(btn.dataset.id);
+                    cart[id] = (cart[id] || 0) + 1;
+                    updateCartBadge();
+                    renderCart();
+                    renderProducts();
+                });
+            });
+        }
+
+        function renderCategories() {
+            categoryGrid.innerHTML = categories.map(cat => `
+                <div class="category-item ${activeCategory === cat.name ? 'active' : ''}" data-cat="${cat.name}">
+                    <div class="category-circle">${photoBox(cat.img, cat.name[0])}</div>
+                    <div class="cat-label">${cat.name}</div>
+                </div>
+            `).join('');
+
+            document.querySelectorAll('.category-item').forEach(el => {
+                el.addEventListener('click', () => {
+                    const cat = el.dataset.cat;
+                    activeCategory = (activeCategory === cat) ? 'all' : cat;
+                    renderCategories();
+                    renderProducts();
+                    productGrid.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                });
+            });
+        }
+
+        function updateWishlistBadge() {
+            const el = document.getElementById('wishlistCount');
+            el.textContent = wishlist.size;
+            el.style.display = wishlist.size ? 'flex' : 'none';
+        }
+
+        function updateCartBadge() {
+            const count = Object.values(cart).reduce((a, b) => a + b, 0);
+            const el = document.getElementById('cartCount');
+            el.textContent = count;
+            el.style.display = count ? 'flex' : 'none';
+        }
+
+        function renderCart() {
+            const cartItems = document.getElementById('cartItems');
+            const ids = Object.keys(cart).filter(id => cart[id] > 0);
+
+            if (ids.length === 0) {
+                cartItems.innerHTML = '<div class="cart-empty">Your cart is empty</div>';
+                document.getElementById('cartTotal').textContent = '₹0';
+                return;
+            }
+
+            let total = 0;
+            cartItems.innerHTML = ids.map(id => {
+                const item = listings.find(l => l.id === Number(id));
+                const qty = cart[id];
+                total += item.price * qty;
+                return `
+                    <div class="cart-item">
+                        <div class="thumb-sm">${photoBox(item.img, '')}</div>
+                        <div class="info">
+                            <div class="name">${item.name}</div>
+                            <div class="price">₹${item.price.toLocaleString('en-IN')} × ${qty}</div>
+                        </div>
+                        <button class="remove" data-id="${id}">Remove</button>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('cartTotal').textContent = '₹' + total.toLocaleString('en-IN');
+
+            document.querySelectorAll('.cart-item .remove').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    delete cart[btn.dataset.id];
+                    updateCartBadge();
+                    renderCart();
+                    renderProducts();
+                });
+            });
+        }
+
+        // ---------- Carousel ----------
+        const track = document.getElementById('carouselTrack');
+        const slides = track.children;
+        const dotsWrap = document.getElementById('carouselDots');
+        let currentSlide = 0;
+
+        for (let i = 0; i < slides.length; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+            dot.addEventListener('click', () => goToSlide(i));
+            dotsWrap.appendChild(dot);
+        }
+
+        function goToSlide(index) {
+            currentSlide = (index + slides.length) % slides.length;
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+            document.querySelectorAll('.carousel-dot').forEach((d, i) => d.classList.toggle('active', i === currentSlide));
+        }
+
+        document.getElementById('carouselPrev').addEventListener('click', () => goToSlide(currentSlide - 1));
+        document.getElementById('carouselNext').addEventListener('click', () => goToSlide(currentSlide + 1));
+
+        let autoplay = setInterval(() => goToSlide(currentSlide + 1), 5000);
+        const carouselEl = document.getElementById('carousel');
+        carouselEl.addEventListener('mouseenter', () => clearInterval(autoplay));
+        carouselEl.addEventListener('mouseleave', () => { autoplay = setInterval(() => goToSlide(currentSlide + 1), 5000); });
+
+        // ---------- Cart drawer ----------
+        const cartDrawer = document.getElementById('cartDrawer');
+        const cartOverlay = document.getElementById('cartOverlay');
+        function openCart() { cartDrawer.classList.add('open'); cartOverlay.classList.add('open'); }
+        function closeCart() { cartDrawer.classList.remove('open'); cartOverlay.classList.remove('open'); }
+        document.getElementById('cartNavBtn').addEventListener('click', openCart);
+        document.getElementById('closeCartBtn').addEventListener('click', closeCart);
+        cartOverlay.addEventListener('click', closeCart);
+
+        // ---------- Search ----------
+        searchInput.addEventListener('input', renderProducts);
+
+        // ---------- Init ----------
+        renderCategories();
+        renderProducts();
+        renderCart();
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Individual Seller Verification</title>
+    <style>
+        :root {
+            --accent: #d97706;
+            --accent-dark: #b45309;
+            --text-dark: #3f2f1f;
+            --text-muted: #8a7967;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        /* Warm cream-to-terracotta gradient to match the pet portal's friendly,
+       approachable palette used across the seller/buyer/shop flows */
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: radial-gradient(circle at 25% 15%, #fde8d0 0%, #f6c98f 45%, #d97706 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Faint paw-print texture for subtle depth without distracting from the form */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.35) 2px, transparent 2px);
+            background-size: 30px 30px;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 460px;
+            background: #ffffff;
+            padding: 36px 34px;
+            border-radius: 18px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
+            animation: rise 0.5s ease-out;
+        }
+
+        @keyframes rise {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .step-indicator {
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            color: var(--accent-dark);
+            background: #fff7ed;
+            display: inline-block;
+            padding: 5px 14px;
+            border-radius: 20px;
+            margin-bottom: 14px;
+        }
+
+        .step-row {
+            text-align: center;
+        }
+
+        .icon-badge {
+            width: 56px;
+            height: 56px;
+            margin: 4px auto 14px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            color: #fff;
+            box-shadow: 0 8px 18px rgba(217, 119, 6, 0.35);
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--text-dark);
+            margin: 0 0 6px;
+            font-size: 23px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13.5px;
+            margin: 0 0 26px;
+            line-height: 1.5;
+        }
+
+        label {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 6px;
+            color: #444;
+            font-size: 14px;
+        }
+
+        label .req {
+            color: var(--accent-dark);
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 12px 14px;
+            margin-bottom: 6px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            background: #f8fafc;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.15);
+        }
+
+        .field-note {
+            font-size: 11.5px;
+            color: #94a3b8;
+            margin: 0 0 16px;
+        }
+
+        .trust-box {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            background: #fff7ed;
+            border: 1px solid #fed7aa;
+            border-radius: 10px;
+            padding: 12px 14px;
+            margin-bottom: 20px;
+            font-size: 12.5px;
+            color: #9a3412;
+            line-height: 1.5;
+        }
+
+        .trust-box .lock {
+            font-size: 16px;
+            line-height: 1;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 13px 0;
+            background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s ease, transform 0.15s ease;
+        }
+
+        .submit-btn:hover {
+            opacity: 0.92;
+            transform: translateY(-1px);
+        }
+
+        .note {
+            text-align: center;
+            font-size: 11.5px;
+            color: #94a3b8;
+            margin-top: 16px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 28px 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="step-row">
+            <span class="step-indicator">STEP 2 OF 2</span>
+        </div>
+        <div class="icon-badge">🐾</div>
+        <h2>Individual Seller Verification</h2>
+        <p class="subtitle">Just a few more details to activate your seller account</p>
+
+        <form method="POST" action="your-space.html">
+            <label for="aadhar">Aadhar Number <span class="req">*</span></label>
+            <input type="text" id="aadhar" name="Aadhar" placeholder="XXXX XXXX XXXX" maxlength="12" pattern="\d{12}"
+                title="Enter 12-digit Aadhar number" required>
+            <p class="field-note">Used for identity verification only.</p>
+
+            <label for="phone">Phone Number <span class="req">*</span></label>
+            <input type="tel" id="phone" name="PhoneNumber" placeholder="10-digit mobile number" pattern="\d{10}"
+                title="Enter 10-digit phone number" required>
+            <p class="field-note">We'll send order and verification alerts here.</p>
+
+            <label for="address">Address <span class="req">*</span></label>
+            <textarea id="address" name="Address" placeholder="House no., street, city, state, PIN code"
+                required></textarea>
+            <p class="field-note">This should match your identity document address.</p>
+
+            <div class="trust-box">
+                <span class="lock">🔒</span>
+                <span>Your details are encrypted and used only to verify your identity as an individual seller. They are
+                    never shared with third parties.</span>
+            </div>
+<center>
+    <button type="submit" "submit-btn">Verify & Activate Account
+    </center>
+        </form>
+
+        <p class="note">Verification usually takes 24&ndash;48 hours. You'll be notified by email once approved.</p>
+    </div>
+</body>
+
+</html>
